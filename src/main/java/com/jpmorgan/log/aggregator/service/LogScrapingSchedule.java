@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,17 +50,17 @@ public class LogScrapingSchedule {
             reader = new BufferedReader(
                     new InputStreamReader(loggeratorSocketConnect.getInputStream()));
             String output;
-            while((output = reader.readLine()) != null){
+            while ((output = reader.readLine()) != null) {
                 //logger.info(output);
                 parsedLineList.add(output);
 
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             logger.error(e.getMessage());
-        }finally{
+        } finally {
             try {
                 reader.close();
-            }catch(IOException e){
+            } catch (IOException e) {
             }
         }
         try {
@@ -71,12 +72,12 @@ public class LogScrapingSchedule {
 
             logger.info("Parsed Lines received : " + parsedLineList.size());
             //next step insert them into data store
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("Error storing the data : " + e.getMessage());
         }
     }
 
-    private Socket loggeratorSocketConnect(){
+    private Socket loggeratorSocketConnect() {
         Socket s = new Socket();
         try {
             s.connect(new InetSocketAddress(loggeratorHost, loggeratorPort), loggeratorConnectionTimeout); // Connection timeout set to 5 seconds with socket.
@@ -86,6 +87,6 @@ public class LogScrapingSchedule {
             logger.error(e.getMessage());
         }
         return s;
-    };
+    }
 
 }

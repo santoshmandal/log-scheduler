@@ -1,7 +1,8 @@
 ## How to build
 Go to log-scheduler-service and run the maven command
 
-    mvn clean install 
+    mvn clean install
+    To run locally
     java -jar target/log-scheduler*.jar
 
 ## Docker Image Build
